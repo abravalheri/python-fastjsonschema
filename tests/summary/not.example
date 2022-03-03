@@ -17,7 +17,7 @@
 properties:
   type: {enum: ['A', 'B']}
 non-predefined acceptable property names:
-  (not the following):
+  (*NOT* the following):
     at least one of the following:
       - {predefined value: '*'}
       - {pattern: '.*', min length: 8}

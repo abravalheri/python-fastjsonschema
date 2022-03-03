@@ -33,7 +33,7 @@ class SummaryWriter:
             "anyOf": "at least one of the following",
             "oneOf": "exactly one of the following",
             "allOf": "all of the following",
-            "not": '(not the following)',
+            "not": '(*NOT* the following)',
             "prefixItems": "items (in order)",
             "items": "items",
             "contains": "contains at least one of",

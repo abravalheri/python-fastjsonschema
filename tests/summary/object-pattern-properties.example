@@ -9,4 +9,4 @@ properties:
   number: {type: 'number'}
 pattern properties:
   '^.*':
-    (not the following): {type: 'string'}
+    (*NOT* the following): {type: 'string'}
