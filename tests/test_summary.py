@@ -14,6 +14,10 @@ def load_example(file):
     text = file.read_text(encoding="utf-8")
     schema, _, summary = text.partition("# - # - # - #\n")
 
+    # # Auto fix examples:
+    # fixed = SummaryWriter()(json.loads(schema))
+    # file.write_text(text.replace(summary, fixed), encoding="utf-8")
+
     return json.loads(schema), summary
 
 

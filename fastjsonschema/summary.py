@@ -83,10 +83,12 @@ class SummaryWriter:
 
         child_prefix = self._child_prefix(prefix, "  ")
         item_prefix = self._child_prefix(prefix, "- ")
+        indent = len(prefix) * " "
         with io.StringIO() as buffer:
-            for key, value in filtered.items():
+            for i, (key, value) in enumerate(filtered.items()):
                 child_path = [*_path, key]
-                buffer.write(f"{prefix}{self._label(child_path)}:")
+                buffer.write(f"{prefix if i == 0 else indent}{self._label(child_path)}:")
+                # ^  just the first item should receive the complete prefix
                 if isinstance(value, dict):
                     filtered = self._filter_unecessary(value)
                     simple = self._handle_simple_dict(filtered, child_path)
