@@ -4,9 +4,9 @@
     "patternProperties": {"^.*": {"not": {"type": "string"}}}
 }
 # - # - # - #
-an object:
-* with the following properties:
-  - `number`: a number value
-* with properties that match:
-  - pattern('^.*'): NOT ("negative" match):
-    * a string value
+type: 'object'
+properties:
+  number: {type: 'number'}
+pattern properties:
+  '^.*':
+    (not the following): {type: 'string'}

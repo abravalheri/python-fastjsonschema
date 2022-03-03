@@ -5,6 +5,5 @@
     }
 }
 # - # - # - #
-an array (list):
-- with any items in the form of:
-  - a number value
+type: 'array'
+items: {type: 'number'}

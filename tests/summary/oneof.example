@@ -13,12 +13,12 @@
     "required": ["type"]
 }
 # - # - # - #
-an object:
-* contain the following properties:
-  - `type`: one of ['A', 'B']
-* property names:
-  * one of the following (only one):
-    - specifically '*'
-    - pattern: 'a*', min length: 8
-* extra properties are NOT allowed
-* required properties: ['type']
+type: 'object'
+properties:
+  type: {enum: ['A', 'B']}
+non-predefined acceptable property names:
+  exactly one of the following:
+    - {predefined value: '*'}
+    - {pattern: 'a*', min length: 8}
+additional properties: False
+required: ['type']

@@ -19,4 +19,7 @@
     }
 }
 # - # - # - #
-a ['integer', 'string'] value (if: {'type': 'integer'}, then it should be: "\n "{'type': 'integer', 'maximum': 9999, 'minimum': 0}, otherwise it should be: "\n "{'type': 'string', 'maxLength': 4, 'minLength': 1, 'pattern': '\\\\d+'})
+type: ['integer', 'string']
+if: {type: 'integer'}
+then: {type: 'integer', maximum: 9999}
+else: {type: 'string', max length: 4, min length: 1, pattern: '\\d+'}

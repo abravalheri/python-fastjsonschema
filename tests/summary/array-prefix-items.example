@@ -9,11 +9,10 @@
     "uniqueItems": true
 }
 # - # - # - #
-an array (list):
-- with the following items:
-  - a number value
-  - a boolean value
-- with at least one item in the form of:
-  - a string value (pattern: 'a*', max length: 8)
-- min items: 5
-- unique items: True
+type: 'array'
+items (in order):
+  - {type: 'number'}
+  - {type: 'boolean'}
+contains at least one of: {type: 'string', pattern: 'a*', max length: 8}
+min items: 5
+unique items: True

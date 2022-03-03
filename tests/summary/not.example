@@ -14,12 +14,12 @@
     "required": ["type"]
 }
 # - # - # - #
-with the following properties:
-- `type`: one of ['A', 'B']
-property names:
-* NOT ("negative" match):
-  * any of the following (one or more):
-    - specifically '*'
-    - pattern: '.*', min length: 8
-extra properties are NOT allowed
-required properties: ['type']
+properties:
+  type: {enum: ['A', 'B']}
+non-predefined acceptable property names:
+  (not the following):
+    at least one of the following:
+      - {predefined value: '*'}
+      - {pattern: '.*', min length: 8}
+additional properties: False
+required: ['type']

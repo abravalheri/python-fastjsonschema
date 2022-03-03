@@ -6,8 +6,8 @@ import pytest
 
 from fastjsonschema.summary import SummaryWriter
 
-HERE = Path(__file__).parent
-EXAMPLES = (HERE / "summary").glob("*")
+EXAMPLE_FOLDER = Path(__file__).parent / "summary"
+EXAMPLES = (p.name for p in EXAMPLE_FOLDER.glob("*"))
 
 
 def load_example(file):
@@ -19,7 +19,7 @@ def load_example(file):
 
 @pytest.mark.parametrize("example", EXAMPLES)
 def test_summary_generation(example):
-    schema, expected = load_example(example)
+    schema, expected = load_example(EXAMPLE_FOLDER / example)
     summarize = SummaryWriter()
     summary = summarize(schema)
     assert summary == expected
