@@ -6,7 +6,7 @@
 # - # - # - #
 type: 'object'
 properties:
-  number: {type: number}
+  'number': {type: number}
 properties named via pattern:
   (regex '^.*'):
     (*NOT* the following): {type: string}

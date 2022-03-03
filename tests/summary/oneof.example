@@ -15,7 +15,7 @@
 # - # - # - #
 type: 'object'
 properties:
-  type: {enum: ['A', 'B']}
+  'type': {enum: ['A', 'B']}
 non-predefined acceptable property names:
   exactly one of the following:
     - {predefined value: '*'}

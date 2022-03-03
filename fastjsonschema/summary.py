@@ -46,12 +46,9 @@ class SummaryWriter:
             "items": "items",
             "contains": "contains at least one of",
             "propertyNames": (
-                "non-predefined acceptable "
-                f"{self._jargon('property names')}"
+                f"non-predefined acceptable {self._jargon('property names')}"
             ),
-            "patternProperties": (
-                f"{self._jargon('properties')} named via pattern"
-            ),
+            "patternProperties": f"{self._jargon('properties')} named via pattern",
             "const": "predefined value",
         }
         # Attributes that indicate that the definition is easy and can be done
@@ -74,13 +71,13 @@ class SummaryWriter:
         return self.jargon.get(term, term)
 
     def __call__(
-        self, schema: Union[dict, list], prefix: str = "", *, _parent: str = ""
+        self, schema: Union[dict, list], prefix: str = "", *, _path: List[str] = []
     ) -> str:
         if isinstance(schema, list):
-            return self._handle_list(schema, prefix, _parent)
+            return self._handle_list(schema, prefix, _path)
 
         filtered = self._filter_unecessary(schema)
-        simple = self._handle_simple_dict(filtered, _parent)
+        simple = self._handle_simple_dict(filtered, _path)
         if simple:
             return f"{prefix}{simple}"
 
@@ -88,17 +85,18 @@ class SummaryWriter:
         item_prefix = self._child_prefix(prefix, "- ")
         with io.StringIO() as buffer:
             for key, value in filtered.items():
-                buffer.write(f"{prefix}{self._label(key, _parent)}:")
+                child_path = [*_path, key]
+                buffer.write(f"{prefix}{self._label(child_path)}:")
                 if isinstance(value, dict):
                     filtered = self._filter_unecessary(value)
-                    simple = self._handle_simple_dict(filtered, key)
+                    simple = self._handle_simple_dict(filtered, child_path)
                     buffer.write(
                         f" {simple}"
                         if simple
-                        else f"\n{self(value, child_prefix, _parent=key)}"
+                        else f"\n{self(value, child_prefix, _path=child_path)}"
                     )
                 elif isinstance(value, list):
-                    children = self._handle_list(value, item_prefix, key)
+                    children = self._handle_list(value, item_prefix, child_path)
                     sep = " " if children.startswith("[") else "\n"
                     buffer.write(f"{sep}{children}")
                 else:
@@ -112,35 +110,59 @@ class SummaryWriter:
             if not (any(key.startswith(k) for k in "$_") or key in self._IGNORE)
         }
 
-    def _handle_simple_dict(self, value: dict, parent: str) -> Optional[str]:
+    def _handle_simple_dict(self, value: dict, path: List[str]) -> Optional[str]:
         inline = any(p in value for p in self._guess_inline_defs)
         simple = not any(isinstance(v, (list, dict)) for v in value.values())
         if inline or simple:
-            return f"{{{', '.join(self._inline_attrs(value, parent))}}}\n"
+            return f"{{{', '.join(self._inline_attrs(value, path))}}}\n"
         return None
 
-    def _handle_list(self, schemas: list, prefix: str = "", parent: str = "") -> str:
+    def _handle_list(
+        self, schemas: list, prefix: str = "", path: List[str] = []
+    ) -> str:
         repr_ = repr(schemas)
         if all(not isinstance(e, (dict, list)) for e in schemas) and len(repr_) < 60:
             return f"{repr_}\n"
 
         item_prefix = self._child_prefix(prefix, "- ")
-        return "".join(self(v, item_prefix, _parent=parent) for v in schemas)
+        return "".join(
+            self(v, item_prefix, _path=[*path, f"[{i}]"]) for i, v in enumerate(schemas)
+        )
 
-    def _label(self, key: str, parent: str) -> str:
-        if parent == "patternProperties":
+    def _is_property(self, path: List[str]):
+        """Check if the given path can correspond to an arbitrarily named property"""
+        if not path:
+            return False
+
+        counter = 0
+        for key in path[-2::-1]:
+            if key not in {"properties", "patternProperties"}:
+                break
+            counter += 1
+
+        # If the counter if even, the path correspond to a JSON Schema keyword
+        # otherwise it can be any arbitrary string naming a property
+        return counter % 2 == 1
+
+    def _label(self, path: List[str]) -> str:
+        *parents, key = path
+        if not self._is_property(path):
+            norm_key = separate_terms(key)
+            return self._terms.get(key) or " ".join(self._jargon(k) for k in norm_key)
+
+        if parents[-1] == "patternProperties":
             return f"(regex {key!r})"
-        if parent == "properties":
-            return key
-        norm_key = separate_terms(key)
-        return self._terms.get(key) or " ".join(self._jargon(k) for k in norm_key)
+        return repr(key)  # property name
 
-    def _value(self, value: Any, key: str) -> str:
-        return self._jargon(value) if key == "type" else repr(value)
+    def _value(self, value: Any, path: List[str]) -> str:
+        if not self._is_property(path) and path[-1] == "type":
+            return self._jargon(value)
+        return repr(value)
 
-    def _inline_attrs(self, schema: dict, parent: str) -> str:
+    def _inline_attrs(self, schema: dict, path: List[str]) -> str:
         for key, value in schema.items():
-            yield f"{self._label(key, parent)}: {self._value(value, key)}"
+            child_path = [*path, key]
+            yield f"{self._label(child_path)}: {self._value(value, child_path)}"
 
     def _child_prefix(self, parent_prefix: str, child_prefix: str) -> str:
         return len(parent_prefix) * " " + child_prefix
