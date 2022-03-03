@@ -49,7 +49,7 @@
 # - # - # - #
 type: 'object'
 properties:
-  street_address: {type: 'string'}
+  street_address: {type: string}
   country: {enum: ['United States of America', 'Canada', 'Netherlands']}
 all of the following:
   - if:

@@ -11,8 +11,8 @@
 # - # - # - #
 type: 'array'
 items (in order):
-  - {type: 'number'}
-  - {type: 'boolean'}
-contains at least one of: {type: 'string', pattern: 'a*', max length: 8}
+  - {type: number}
+  - {type: boolean}
+contains at least one of: {type: string, pattern: 'a*', max length: 8}
 min items: 5
 unique items: True
