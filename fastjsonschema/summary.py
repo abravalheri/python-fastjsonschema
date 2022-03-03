@@ -50,6 +50,7 @@ class SummaryWriter:
             ),
             "patternProperties": f"{self._jargon('properties')} named via pattern",
             "const": "predefined value",
+            "enum": "one of",
         }
         # Attributes that indicate that the definition is easy and can be done
         # inline (e.g. string and number)
@@ -67,7 +68,9 @@ class SummaryWriter:
             "multipleOf",
         ]
 
-    def _jargon(self, term: str) -> str:
+    def _jargon(self, term: [str, List[str]]) -> str:
+        if isinstance(term, list):
+            return [self.jargon.get(t, t) for t in term]
         return self.jargon.get(term, term)
 
     def __call__(

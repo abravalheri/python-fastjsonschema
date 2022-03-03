@@ -50,7 +50,7 @@
 type: 'object'
 properties:
   'street_address': {type: string}
-  'country': {enum: ['United States of America', 'Canada', 'Netherlands']}
+  'country': {one of: ['United States of America', 'Canada', 'Netherlands']}
 all of the following:
   - if:
       properties:

@@ -15,7 +15,7 @@
 }
 # - # - # - #
 properties:
-  'type': {enum: ['A', 'B']}
+  'type': {one of: ['A', 'B']}
 non-predefined acceptable property names:
   (*NOT* the following):
     at least one of the following:
