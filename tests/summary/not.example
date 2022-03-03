@@ -1,0 +1,25 @@
+{
+    "properties": {
+        "type": {"enum": ["A", "B"]}
+    },
+    "propertyNames": {
+        "not": {
+            "anyOf": [
+                {"const": "*"},
+                {"pattern": ".*", "minLength": 8}
+            ]
+        }
+    },
+    "additionalProperties": false,
+    "required": ["type"]
+}
+# - # - # - #
+with the following properties:
+- `type`: one of ['A', 'B']
+property names:
+* NOT ("negative" match):
+  * any of the following (one or more):
+    - specifically '*'
+    - pattern: '.*', min length: 8
+extra properties are NOT allowed
+required properties: ['type']

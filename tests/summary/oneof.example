@@ -1,0 +1,24 @@
+{
+    "type": "object",
+    "properties": {
+        "type": {"enum": ["A", "B"]}
+    },
+    "propertyNames": {
+        "oneOf": [
+            {"const": "*"},
+            {"pattern": "a*", "minLength": 8}
+        ]
+    },
+    "additionalProperties": false,
+    "required": ["type"]
+}
+# - # - # - #
+an object:
+* contain the following properties:
+  - `type`: one of ['A', 'B']
+* property names:
+  * one of the following (only one):
+    - specifically '*'
+    - pattern: 'a*', min length: 8
+* extra properties are NOT allowed
+* required properties: ['type']

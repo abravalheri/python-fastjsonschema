@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {"type": {"enum": ["A", "B"]}},
+    "propertyNames": {"pattern": "a*", "maxLength": 8}
+}
+# - # - # - #
+an object:
+* with the following properties:
+  - `type`: one of ['A', 'B']
+* property names:
+  * pattern: 'a*', max length: 8

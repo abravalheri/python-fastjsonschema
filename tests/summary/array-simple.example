@@ -1,0 +1,10 @@
+{
+    "type": "array",
+    "items": {
+        "type": "number"
+    }
+}
+# - # - # - #
+an array (list):
+- with any items in the form of:
+  - a number value
